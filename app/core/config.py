@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import EmailStr, Field
+from pydantic import EmailStr
 from pydantic import BaseSettings
 from dotenv import load_dotenv
 
