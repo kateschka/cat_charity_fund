@@ -9,8 +9,10 @@ load_dotenv()
 class Settings(BaseSettings):
     """Настройки приложения."""
 
-    app_title: str = None
-    app_description: str = None
+    app_title: str = 'QRKot'
+    app_description: str = (
+        'QRKot - это сервис для пожертвований на благотворительные проекты.'
+    )
     database_url: str = Field(
         default='sqlite+aiosqlite:///./fastapi.db', env='DATABASE_URL')
     secret: str = 'SECRET'
