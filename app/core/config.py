@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     """Настройки приложения."""
 
     app_title: str = None
-    app_description: str
+    app_description: str = None
     database_url: str = Field(
         default='sqlite+aiosqlite:///./fastapi.db', env='DATABASE_URL')
     secret: str = 'SECRET'
