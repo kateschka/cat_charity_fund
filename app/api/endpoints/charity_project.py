@@ -51,11 +51,9 @@ async def create_charity_project(
         [new_project]
     )
 
-    session.add_all(modified_objects)
-    await session.commit()
-    await session.refresh(new_project)
+    await charity_project_crud.update_multi(modified_objects, session)
 
-    return new_project
+    return await charity_project_crud.refresh(new_project, session)
 
 
 @router.get(
@@ -105,11 +103,9 @@ async def update_charity_project(
             charity_project_from_db_by_id.invested_amount
         )
 
-    charity_project_from_db_by_id = await charity_project_crud.update_project(
+    return await charity_project_crud.update_project(
         charity_project_from_db_by_id, charity_project, session
     )
-
-    return charity_project_from_db_by_id
 
 
 @router.delete(

@@ -1,8 +1,8 @@
-
 from http import HTTPStatus
 from typing import Optional
 
 from fastapi import HTTPException
+
 from app.core.error_message import ErrorMessage
 from app.models import CharityProject
 

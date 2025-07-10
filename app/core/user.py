@@ -1,4 +1,3 @@
-
 from typing import Optional, Union
 
 from fastapi import Depends, Request
@@ -15,6 +14,7 @@ from app.core.config import settings
 from app.core.db import get_async_session
 from app.models.user import User
 from app.schemas.user import UserCreate
+from .constants import JWT_LIFETIME_SECONDS, MIN_PASSWORD_LENGTH
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
@@ -24,7 +24,9 @@ bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
 
 def get_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=settings.secret, lifetime_seconds=3600)
+    return JWTStrategy(
+        secret=settings.secret, lifetime_seconds=JWT_LIFETIME_SECONDS
+    )
 
 
 auth_backend = AuthenticationBackend(
@@ -41,13 +43,14 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         password: str,
         user: Union[UserCreate, User],
     ) -> None:
-        if len(password) < 3:
+        if len(password) < MIN_PASSWORD_LENGTH:
             raise InvalidPasswordException(
-                reason='Password should be at least 3 characters'
+                reason=f'Пароль должен быть длиной не менее '
+                       f'{MIN_PASSWORD_LENGTH} символов'
             )
         if user.email in password:
             raise InvalidPasswordException(
-                reason='Password should not contain e-mail'
+                reason='Пароль не должен содержать email'
             )
 
     async def on_after_register(

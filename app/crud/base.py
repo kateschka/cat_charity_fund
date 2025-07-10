@@ -1,5 +1,5 @@
-
 from typing import Optional
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -83,3 +83,23 @@ class CRUDBase:
             select(self.model).where(attr == attr_value)
         )
         return db_obj.scalars().first()
+
+    async def update_multi(
+            self,
+            db_objs,
+            session: AsyncSession,
+    ):
+        for db_obj in db_objs:
+            session.add(db_obj)
+        await session.commit()
+        for db_obj in db_objs:
+            await session.refresh(db_obj)
+        return db_objs
+
+    async def refresh(
+            self,
+            db_obj,
+            session: AsyncSession,
+    ):
+        await session.refresh(db_obj)
+        return db_obj

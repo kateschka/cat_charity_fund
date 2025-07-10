@@ -40,11 +40,9 @@ async def create_donation(
         await charity_project_crud.get_all_unclosed_charity_projects(session)
     )
 
-    session.add_all(charity_projects_to_update)
-    await session.commit()
-    await session.refresh(new_donation)
+    await donation_crud.update_multi(charity_projects_to_update, session)
 
-    return new_donation
+    return await donation_crud.refresh(new_donation, session)
 
 
 @router.get(
