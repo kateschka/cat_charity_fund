@@ -13,8 +13,7 @@ class Settings(BaseSettings):
     app_description: str = (
         'QRKot - это сервис для пожертвований на благотворительные проекты.'
     )
-    database_url: str = Field(
-        default='sqlite+aiosqlite:///./fastapi.db', env='DATABASE_URL')
+    database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
     secret: str = 'SECRET'
     first_superuser_email: Optional[EmailStr] = 'root@admin.ru'
     first_superuser_password: Optional[str] = 'root'
